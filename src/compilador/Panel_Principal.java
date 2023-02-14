@@ -122,7 +122,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 		String codigo;
 		codigo = jTextArea1.getText();
 		llenarLista(codigo);
-		llenarTabla();
+		llenarColumnaLexema();
 	}// GEN-LAST:event_Btn_AnalizarActionPerformed
 	
 	public void llenarLista(String codigo) {
@@ -144,7 +144,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 		}
 	}
 	
-	public void llenarTabla() {
+	public void llenarColumnaLexema() {
 		int fila=0;
 		for( fila=0;fila<lexema.size();fila++) {
 			jTable2.setValueAt("", fila, 0);
