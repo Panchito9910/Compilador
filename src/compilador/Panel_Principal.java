@@ -123,6 +123,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 		codigo = jTextArea1.getText();
 		llenarLista(codigo);
 		llenarColumnaLexema();
+		analizarLexemas();
 	}// GEN-LAST:event_Btn_AnalizarActionPerformed
 	
 	public void llenarLista(String codigo) {
@@ -131,11 +132,11 @@ public class Panel_Principal extends javax.swing.JFrame {
 		lexema.clear();
 		for(int i=0;i<codigo.length();i++) {
 			caracter=codigo.charAt(i);
-			if(caracter!=' ') {
+			if(caracter!=' ' && caracter!='\n') {
 				lexem=lexem+caracter;
-				if(caracter==';') {
+				/*if(caracter==';') {
 					if(lexema.contains(lexem)==false) lexema.add(lexem);
-				}
+				}*/
 			}else{
 				if(lexema.isEmpty())lexema.add(lexem);
 				if(lexema.contains(lexem)==false) lexema.add(lexem);
@@ -153,6 +154,21 @@ public class Panel_Principal extends javax.swing.JFrame {
 			jTable2.setValueAt(lexema.get(fila), fila, 0);
 		}
 	}
+	public void analizarLexemas() {
+		int fila = 0;
+		for( int f=0;f<lexema.size();f++) {
+			jTable2.setValueAt("", f, 1);
+		}
+		for (String lexem : lexema) {
+			if(lexem.equals("$Entero") || lexem.equals("$Real")||lexem.equals("$Cadena")) {
+				jTable2.setValueAt(lexem, fila, 1);
+			}
+			System.out.println(fila);
+			fila++;
+		}
+		
+	}
+	
 	/**
 	 * @param args the command line arguments
 	 */
