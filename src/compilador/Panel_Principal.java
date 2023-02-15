@@ -1,6 +1,8 @@
 
 package compilador;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Panel_Principal extends javax.swing.JFrame {
 	private static final long serialVersionUID = 1L;
@@ -123,20 +125,22 @@ public class Panel_Principal extends javax.swing.JFrame {
 		codigo = jTextArea1.getText();
 		llenarLista(codigo);
 		llenarColumnaLexema();
-		analizarLexemas();
+		analizarLexemas(codigo);
 	}// GEN-LAST:event_Btn_AnalizarActionPerformed
 	
 	public void llenarLista(String codigo) {
 		char caracter;
 		String lexem="";
+		for( int fila=0;fila<lexema.size();fila++) {
+			jTable2.setValueAt("", fila, 0);
+			jTable2.setValueAt("", fila, 1);
+			jTable2.setValueAt("", fila, 2);
+		}
 		lexema.clear();
 		for(int i=0;i<codigo.length();i++) {
 			caracter=codigo.charAt(i);
 			if(caracter!=' ' && caracter!='\n') {
 				lexem=lexem+caracter;
-				/*if(caracter==';') {
-					if(lexema.contains(lexem)==false) lexema.add(lexem);
-				}*/
 			}else{
 				if(lexema.isEmpty())lexema.add(lexem);
 				if(lexema.contains(lexem)==false) lexema.add(lexem);
@@ -146,41 +150,77 @@ public class Panel_Principal extends javax.swing.JFrame {
 	}
 	
 	public void llenarColumnaLexema() {
-		int fila=0;
-		for( fila=0;fila<lexema.size();fila++) {
-			jTable2.setValueAt("", fila, 0);
-		}
-		for( fila=0;fila<lexema.size();fila++) {
+		for(int fila=0;fila<lexema.size();fila++) {
 			jTable2.setValueAt(lexema.get(fila), fila, 0);
 		}
 	}
-	public void analizarLexemas() {
-		int fila = 0;
-		for( int f=0;f<lexema.size();f++) {
-			jTable2.setValueAt("", f, 1);
-		}
-		for (String lexem : lexema) {
-			if(lexem.equals("$Entero") || lexem.equals("$Real")||lexem.equals("$Cadena")) {
-				jTable2.setValueAt(lexem, fila, 1);
+	
+	public void analizarLexemas(String codigo) {
+		char caracter;
+		String tipoDeDato="";
+		String lexem="";
+		for(int i=0;i<codigo.length();i++) {
+			caracter=codigo.charAt(i);
+			if(caracter!=' ' && caracter!='\n') {
+				lexem=lexem+caracter;
+			}else{
+				if(lexem.equals("$Entero")||lexem.equals("$Real")||lexem.equals("$Cadena")) tipoDeDato=lexem;
+				System.out.println(" Tipo de dato : "+tipoDeDato+" lexema : "+lexem);
+				analizarExpresionRegular(tipoDeDato, lexem);
+				lexem="";
 			}
-			System.out.println(fila);
-			fila++;
 		}
 		
 	}
+	public void analizarExpresionRegular(String tipoDeDato, String lexem){
+		/*Identificadores*/
+		if(lexem.matches("^[#|@|a-z][a-z|A-Z|0-9]{1,}$")) {
+			/*$Real*/
+			if(tipoDeDato.equals("$Real")) {
+				for (int fila=0;fila<lexema.size();fila++) {
+					if(tipoDeDato.equals(lexema.get(fila))||lexem.equals(lexema.get(fila))) {
+						jTable2.setValueAt(tipoDeDato, fila, 1);
+					}
+				}
+			}
+			/*$Entero*/
+			if(tipoDeDato.equals("$Entero")) {
+				for (int fila=0;fila<lexema.size();fila++) {
+					if(tipoDeDato.equals(lexema.get(fila))||lexem.equals(lexema.get(fila))) {
+						jTable2.setValueAt(tipoDeDato, fila, 1);
+					}
+				}
+			}
+			/*$Cadena*/
+			if(tipoDeDato.equals("$Cadena")) {
+				for (int fila=0;fila<lexema.size();fila++) {
+					if(tipoDeDato.equals(lexema.get(fila))||lexem.equals(lexema.get(fila))) {
+						jTable2.setValueAt(tipoDeDato, fila, 1);
+					}
+				}
+			}
+		}
+		/*Numeros enteros*/
+		if(lexem.matches("^[4][0-9]{1,}[4]$")) {
+			for (int fila=0;fila<lexema.size();fila++) {
+				if(tipoDeDato.equals(lexema.get(fila))||lexem.equals(lexema.get(fila))) {
+					jTable2.setValueAt(tipoDeDato, fila, 1);
+				}
+			}
+		}
+		/*Numeros reales*/
+		if(lexem.matches("^[0-9]{1,}[.][4][0-9]{1,}[4]$")) {
+			for (int fila=0;fila<lexema.size();fila++) {
+				if(tipoDeDato.equals(lexema.get(fila))||lexem.equals(lexema.get(fila))) {
+					jTable2.setValueAt(tipoDeDato, fila, 1);
+				}
+			}
+		}
+
+	}
 	
-	/**
-	 * @param args the command line arguments
-	 */
+
 	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		// <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-		// (optional) ">
-		/*s
-		 * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-		 * look and feel. For details see
-		 * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-		 */
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
