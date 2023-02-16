@@ -155,7 +155,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 			} else {
 				if (lexem.equals("$Entero") || lexem.equals("$Real") || lexem.equals("$Cadena"))
 					tipoDeDato = lexem;
-				System.out.println(" Tipo de dato : "+tipoDeDato+" lexema : "+lexem);
+				/*System.out.println(" Tipo de dato : "+tipoDeDato+" lexema : "+lexem);*/
 				analizarExpresionRegular(tipoDeDato, lexem);
 				if (lexem.equals(";")) {
 					tipoDeDato="";
@@ -203,6 +203,14 @@ public class Panel_Principal extends javax.swing.JFrame {
 			for (int fila = 0; fila < lexema.size(); fila++) {
 				if (tipoDeDato.equals(lexema.get(fila)) || lexem.equals(lexema.get(fila))) {
 					jTable2.setValueAt("$Real", fila, 1);
+				}
+			}
+		}
+		/*Cadenas*/
+		if (lexem.matches("^[\"].{0,}[\"]$")) {
+			for (int fila = 0; fila < lexema.size(); fila++) {
+				if (tipoDeDato.equals(lexema.get(fila)) || lexem.equals(lexema.get(fila))) {
+					jTable2.setValueAt("$Cadena", fila, 1);
 				}
 			}
 		}
