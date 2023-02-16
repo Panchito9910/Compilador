@@ -1,5 +1,6 @@
 
 package compilador;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,6 +8,10 @@ import java.util.regex.Pattern;
 public class Panel_Principal extends javax.swing.JFrame {
 	private static final long serialVersionUID = 1L;
 	ArrayList<String> lexema = new ArrayList<String>();
+	ArrayList<String> enteros = new ArrayList<String>();
+	ArrayList<String> reales = new ArrayList<String>();
+	ArrayList<String> cadenas = new ArrayList<String>();
+	
 	public Panel_Principal() {
 		initComponents();
 	}
@@ -37,40 +42,21 @@ public class Panel_Principal extends javax.swing.JFrame {
 		});
 
 		jTable2.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] { 
-						{ null, null, null }, 
-						{ null, null, null }, 
-						{ null, null, null }, 
-						{ null, null, null },
-						{ null, null, null }, 
-						{ null, null, null }, 
-						{ null, null, null }, 
-						{ null, null, null },
-						{ null, null, null }, 
-						{ null, null, null }, 
-						{ null, null, null }, 
-						{ null, null, null },
-						{ null, null, null }, 
-						{ null, null, null }, 
-						{ null, null, null }, 
-						{ null, null, null },
-						{ null, null, null }, 
-						{ null, null, null },
-						{ null, null, null }, 
-						{ null, null, null },
-						{ null, null, null }, 
-						{ null, null, null }, 
-						{ null, null, null }, 
-						{ null, null, null } },
-			new String[] { "LEXEMA", "TIPO DATO", "VALOR" }) {
-			
+				new Object[][] { { null, null, null }, { null, null, null }, { null, null, null }, { null, null, null },
+						{ null, null, null }, { null, null, null }, { null, null, null }, { null, null, null },
+						{ null, null, null }, { null, null, null }, { null, null, null }, { null, null, null },
+						{ null, null, null }, { null, null, null }, { null, null, null }, { null, null, null },
+						{ null, null, null }, { null, null, null }, { null, null, null }, { null, null, null },
+						{ null, null, null }, { null, null, null }, { null, null, null }, { null, null, null } },
+				new String[] { "LEXEMA", "TIPO DATO", "VALOR" }) {
+
 			private static final long serialVersionUID = 1L;
 			boolean[] canEdit = new boolean[] { false, false, false };
 
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
 				return canEdit[columnIndex];
 			}
-			
+
 		});
 		jTable2.setShowGrid(true);
 		jScrollPane3.setViewportView(jTable2);
@@ -126,100 +112,120 @@ public class Panel_Principal extends javax.swing.JFrame {
 		llenarLista(codigo);
 		llenarColumnaLexema();
 		analizarLexemas(codigo);
+		llenarColumnaTipoDato();
 	}// GEN-LAST:event_Btn_AnalizarActionPerformed
-	
+
 	public void llenarLista(String codigo) {
 		char caracter;
-		String lexem="";
-		for( int fila=0;fila<lexema.size();fila++) {
+		String lexem = "";
+		for (int fila = 0; fila < lexema.size(); fila++) {
 			jTable2.setValueAt("", fila, 0);
 			jTable2.setValueAt("", fila, 1);
 			jTable2.setValueAt("", fila, 2);
 		}
 		lexema.clear();
-		for(int i=0;i<codigo.length();i++) {
-			caracter=codigo.charAt(i);
-			if(caracter!=' ' && caracter!='\n') {
-				lexem=lexem+caracter;
-			}else{
-				if(lexema.isEmpty())lexema.add(lexem);
-				if(lexema.contains(lexem)==false) lexema.add(lexem);
-				lexem="";
+		for (int i = 0; i < codigo.length(); i++) {
+			caracter = codigo.charAt(i);
+			if (caracter != ' ' && caracter != '\n') {
+				lexem = lexem + caracter;
+			} else {
+				if (lexema.isEmpty())
+					lexema.add(lexem);
+				if (lexema.contains(lexem) == false)
+					lexema.add(lexem);
+				lexem = "";
 			}
 		}
 	}
-	
+
 	public void llenarColumnaLexema() {
-		for(int fila=0;fila<lexema.size();fila++) {
+		for (int fila = 0; fila < lexema.size(); fila++) {
 			jTable2.setValueAt(lexema.get(fila), fila, 0);
 		}
 	}
-	
+
 	public void analizarLexemas(String codigo) {
 		char caracter;
-		String tipoDeDato="";
-		String lexem="";
-		for(int i=0;i<codigo.length();i++) {
-			caracter=codigo.charAt(i);
-			if(caracter!=' ' && caracter!='\n') {
-				lexem=lexem+caracter;
-			}else{
-				if(lexem.equals("$Entero")||lexem.equals("$Real")||lexem.equals("$Cadena")) tipoDeDato=lexem;
+		String tipoDeDato = "";
+		String lexem = "";
+		for (int i = 0; i < codigo.length(); i++) {
+			caracter = codigo.charAt(i);
+			if (caracter != ' ' && caracter != '\n') {
+				lexem = lexem + caracter;
+			} else {
+				if (lexem.equals("$Entero") || lexem.equals("$Real") || lexem.equals("$Cadena"))
+					tipoDeDato = lexem;
 				System.out.println(" Tipo de dato : "+tipoDeDato+" lexema : "+lexem);
 				analizarExpresionRegular(tipoDeDato, lexem);
-				lexem="";
+				if (lexem.equals(";")) {
+					tipoDeDato="";
+				}
+				lexem = "";
+			}
+		}
+	}
+
+	public void analizarExpresionRegular(String tipoDeDato, String lexem) {
+//		/*Identificadores*/
+		if (lexem.matches("^[#|@|a-z][a-z|A-Z|0-9]{1,}$")) {
+			if(tipoDeDato.equals("$Entero")) {
+				if (enteros.contains(lexem) == false) {
+					if(reales.contains(lexem)==false || cadenas.contains(lexem)==false) {
+						enteros.add(lexem);
+					}
+				}
+			}
+			if(tipoDeDato.equals("$Real")) {
+				if (reales.contains(lexem) == false) {
+					if(enteros.contains(lexem)==false || cadenas.contains(lexem)==false) {
+						reales.add(lexem);
+					}
+				}
+			}
+			if(tipoDeDato.equals("$Cadena")) {
+				if (cadenas.contains(lexem) == false) {
+					if(reales.contains(lexem)==false || enteros.contains(lexem)==false) {
+						cadenas.add(lexem);
+					}
+				}
+			}
+		}
+		/* Numeros enteros */
+		if (lexem.matches("^[4][0-9]{1,}[4]$")) {
+			for (int fila = 0; fila < lexema.size(); fila++) {
+				if (tipoDeDato.equals(lexema.get(fila)) || lexem.equals(lexema.get(fila))) {
+					jTable2.setValueAt("$Entero", fila, 1);
+				}
+			}
+		}
+		/* Numeros reales */
+		if (lexem.matches("^[0-9]{1,}[.][4][0-9]{1,}[4]$")) {
+			for (int fila = 0; fila < lexema.size(); fila++) {
+				if (tipoDeDato.equals(lexema.get(fila)) || lexem.equals(lexema.get(fila))) {
+					jTable2.setValueAt("$Real", fila, 1);
+				}
+			}
+		}
+
+	}
+	public void llenarColumnaTipoDato() {
+		for (int fila = 0; fila < enteros.size(); fila++) {
+			if(lexema.contains(enteros.get(fila))) {
+				jTable2.setValueAt("$Entero", lexema.indexOf(enteros.get(fila)), 1);
+			}
+		}
+		for (int fila = 0; fila < reales.size(); fila++) {
+			if(lexema.contains(reales.get(fila))) {
+				jTable2.setValueAt("$Real", lexema.indexOf(reales.get(fila)), 1);
+			}
+		}
+		for (int fila = 0; fila < cadenas.size(); fila++) {
+			if(lexema.contains(cadenas.get(fila))) {
+				jTable2.setValueAt("$Cadena", lexema.indexOf(cadenas.get(fila)), 1);
 			}
 		}
 		
 	}
-	public void analizarExpresionRegular(String tipoDeDato, String lexem){
-		/*Identificadores*/
-		if(lexem.matches("^[#|@|a-z][a-z|A-Z|0-9]{1,}$")) {
-			/*$Real*/
-			if(tipoDeDato.equals("$Real")) {
-				for (int fila=0;fila<lexema.size();fila++) {
-					if(tipoDeDato.equals(lexema.get(fila))||lexem.equals(lexema.get(fila))) {
-						jTable2.setValueAt(tipoDeDato, fila, 1);
-					}
-				}
-			}
-			/*$Entero*/
-			if(tipoDeDato.equals("$Entero")) {
-				for (int fila=0;fila<lexema.size();fila++) {
-					if(tipoDeDato.equals(lexema.get(fila))||lexem.equals(lexema.get(fila))) {
-						jTable2.setValueAt(tipoDeDato, fila, 1);
-					}
-				}
-			}
-			/*$Cadena*/
-			if(tipoDeDato.equals("$Cadena")) {
-				for (int fila=0;fila<lexema.size();fila++) {
-					if(tipoDeDato.equals(lexema.get(fila))||lexem.equals(lexema.get(fila))) {
-						jTable2.setValueAt(tipoDeDato, fila, 1);
-					}
-				}
-			}
-		}
-		/*Numeros enteros*/
-		if(lexem.matches("^[4][0-9]{1,}[4]$")) {
-			for (int fila=0;fila<lexema.size();fila++) {
-				if(tipoDeDato.equals(lexema.get(fila))||lexem.equals(lexema.get(fila))) {
-					jTable2.setValueAt(tipoDeDato, fila, 1);
-				}
-			}
-		}
-		/*Numeros reales*/
-		if(lexem.matches("^[0-9]{1,}[.][4][0-9]{1,}[4]$")) {
-			for (int fila=0;fila<lexema.size();fila++) {
-				if(tipoDeDato.equals(lexema.get(fila))||lexem.equals(lexema.get(fila))) {
-					jTable2.setValueAt(tipoDeDato, fila, 1);
-				}
-			}
-		}
-
-	}
-	
-
 	public static void main(String args[]) {
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
