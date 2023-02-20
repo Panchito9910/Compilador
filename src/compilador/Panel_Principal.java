@@ -4,6 +4,13 @@ package compilador;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JLabel;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class Panel_Principal extends javax.swing.JFrame {
 	private static final long serialVersionUID = 1L;
@@ -19,18 +26,18 @@ public class Panel_Principal extends javax.swing.JFrame {
 	private void initComponents() {
 
 		jPanel1 = new javax.swing.JPanel();
-		jScrollPane1 = new javax.swing.JScrollPane();
-		jTextArea1 = new javax.swing.JTextArea();
+		scrollEntradaTexto = new javax.swing.JScrollPane();
+		entradaTexto = new javax.swing.JTextArea();
 		jLabel1 = new javax.swing.JLabel();
 		Btn_Analizar = new javax.swing.JButton();
-		jScrollPane3 = new javax.swing.JScrollPane();
-		jTable2 = new javax.swing.JTable();
+		scrollTablaLexemas = new javax.swing.JScrollPane();
+		tablaLexemas = new javax.swing.JTable();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-		jTextArea1.setColumns(20);
-		jTextArea1.setRows(5);
-		jScrollPane1.setViewportView(jTextArea1);
+		entradaTexto.setColumns(20);
+		entradaTexto.setRows(5);
+		scrollEntradaTexto.setViewportView(entradaTexto);
 
 		jLabel1.setText("ENTRADA DE DATOS");
 
@@ -41,58 +48,134 @@ public class Panel_Principal extends javax.swing.JFrame {
 			}
 		});
 
-		jTable2.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] { { null, null, null }, { null, null, null }, { null, null, null }, { null, null, null },
-						{ null, null, null }, { null, null, null }, { null, null, null }, { null, null, null },
-						{ null, null, null }, { null, null, null }, { null, null, null }, { null, null, null },
-						{ null, null, null }, { null, null, null }, { null, null, null }, { null, null, null },
-						{ null, null, null }, { null, null, null }, { null, null, null }, { null, null, null },
-						{ null, null, null }, { null, null, null }, { null, null, null }, { null, null, null } },
-				new String[] { "LEXEMA", "TIPO DATO", "VALOR" }) {
-
-			private static final long serialVersionUID = 1L;
-			boolean[] canEdit = new boolean[] { false, false, false };
-
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
+		tablaLexemas.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+			},
+			new String[] {
+				"LEXEMA", "TIPO DATO", "VALOR"
 			}
-
+		) {
+			Class[] columnTypes = new Class[] {
+				String.class, Object.class, Object.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
 		});
-		jTable2.setShowGrid(true);
-		jScrollPane3.setViewportView(jTable2);
-		if (jTable2.getColumnModel().getColumnCount() > 0) {
-			jTable2.getColumnModel().getColumn(0).setResizable(false);
-			jTable2.getColumnModel().getColumn(1).setResizable(false);
-			jTable2.getColumnModel().getColumn(2).setResizable(false);
+		tablaLexemas.setShowGrid(true);
+		scrollTablaLexemas.setViewportView(tablaLexemas);
+		if (tablaLexemas.getColumnModel().getColumnCount() > 0) {
+			tablaLexemas.getColumnModel().getColumn(0).setResizable(false);
+			tablaLexemas.getColumnModel().getColumn(1).setResizable(false);
+			tablaLexemas.getColumnModel().getColumn(2).setResizable(false);
 		}
+		
+		JLabel lblTablaLexemas = new JLabel("Tabla de Lexemas");
+		
+		JScrollPane scrollTablaErrores = new JScrollPane();
+		
+		JLabel lblTablaErrores = new JLabel("Tabla de errores");
 
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+		jPanel1Layout.setHorizontalGroup(
+			jPanel1Layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(jPanel1Layout.createSequentialGroup()
+					.addGap(17)
+					.addComponent(scrollEntradaTexto, GroupLayout.PREFERRED_SIZE, 387, GroupLayout.PREFERRED_SIZE)
+					.addGroup(jPanel1Layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(jPanel1Layout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblTablaErrores)
+							.addGap(194))
+						.addGroup(Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+							.addGap(56)
+							.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollTablaErrores, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollTablaLexemas, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addContainerGap(20, Short.MAX_VALUE))))
+				.addGroup(jPanel1Layout.createSequentialGroup()
+					.addGap(149)
+					.addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 385, Short.MAX_VALUE)
+					.addComponent(lblTablaLexemas)
+					.addGap(204))
+				.addGroup(jPanel1Layout.createSequentialGroup()
+					.addGap(396)
+					.addComponent(Btn_Analizar)
+					.addContainerGap(453, Short.MAX_VALUE))
+		);
+		jPanel1Layout.setVerticalGroup(
+			jPanel1Layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(jPanel1Layout.createSequentialGroup()
+					.addGap(29)
+					.addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblTablaLexemas)
+						.addComponent(jLabel1))
+					.addGap(18)
+					.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(jPanel1Layout.createSequentialGroup()
+							.addComponent(scrollTablaLexemas, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
+							.addGap(30)
+							.addComponent(lblTablaErrores)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(scrollTablaErrores, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE))
+						.addComponent(scrollEntradaTexto, GroupLayout.PREFERRED_SIZE, 341, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(Btn_Analizar)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		
+		tablaErrores = new JTable();
+		tablaErrores.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+			},
+			new String[] {
+				"Lexema", "Error", "Descripci\u00F3n", "L\u00EDnea"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				Object.class, Object.class, Object.class, String.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
+		scrollTablaErrores.setViewportView(tablaErrores);
 		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(jPanel1Layout.createSequentialGroup().addGap(17, 17, 17)
-						.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 387,
-								javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-						.addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGap(18, 18, 18))
-				.addGroup(jPanel1Layout.createSequentialGroup().addGroup(jPanel1Layout
-						.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								jPanel1Layout.createSequentialGroup().addGap(396, 396, 396).addComponent(Btn_Analizar))
-						.addGroup(jPanel1Layout.createSequentialGroup().addGap(121, 121, 121).addComponent(jLabel1,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-						jPanel1Layout.createSequentialGroup().addGap(29, 29, 29).addComponent(jLabel1)
-								.addGap(18, 18, 18)
-								.addGroup(jPanel1Layout
-										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-										.addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 423,
-												Short.MAX_VALUE)
-										.addComponent(jScrollPane1))
-								.addGap(18, 18, 18).addComponent(Btn_Analizar).addContainerGap(18, Short.MAX_VALUE)));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -108,20 +191,21 @@ public class Panel_Principal extends javax.swing.JFrame {
 	private void Btn_AnalizarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Btn_AnalizarActionPerformed
 		// TODO add your handling code here:
 		String codigo;
-		codigo = jTextArea1.getText();
+		codigo = entradaTexto.getText();
 		llenarLista(codigo);
 		llenarColumnaLexema();
 		analizarLexemas(codigo);
 		llenarColumnaTipoDato();
+		analizarErrores(codigo);
 	}// GEN-LAST:event_Btn_AnalizarActionPerformed
 
 	public void llenarLista(String codigo) {
 		char caracter;
 		String lexem = "";
 		for (int fila = 0; fila < lexema.size(); fila++) {
-			jTable2.setValueAt("", fila, 0);
-			jTable2.setValueAt("", fila, 1);
-			jTable2.setValueAt("", fila, 2);
+			tablaLexemas.setValueAt("", fila, 0);
+			tablaLexemas.setValueAt("", fila, 1);
+			tablaLexemas.setValueAt("", fila, 2);
 		}
 		lexema.clear();
 		for (int i = 0; i < codigo.length(); i++) {
@@ -137,13 +221,11 @@ public class Panel_Principal extends javax.swing.JFrame {
 			}
 		}
 	}
-
 	public void llenarColumnaLexema() {
 		for (int fila = 0; fila < lexema.size(); fila++) {
-			jTable2.setValueAt(lexema.get(fila), fila, 0);
+			tablaLexemas.setValueAt(lexema.get(fila), fila, 0);
 		}
 	}
-
 	public void analizarLexemas(String codigo) {
 		char caracter;
 		String tipoDeDato = "";
@@ -164,7 +246,6 @@ public class Panel_Principal extends javax.swing.JFrame {
 			}
 		}
 	}
-
 	public void analizarExpresionRegular(String tipoDeDato, String lexem) {
 //		/*Identificadores*/
 		if (lexem.matches("^[#|@|a-z][a-z|A-Z|0-9]{1,}$")) {
@@ -194,7 +275,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 		if (lexem.matches("^[4][0-9]{1,}[4]$")) {
 			for (int fila = 0; fila < lexema.size(); fila++) {
 				if (tipoDeDato.equals(lexema.get(fila)) || lexem.equals(lexema.get(fila))) {
-					jTable2.setValueAt("$Entero", fila, 1);
+					tablaLexemas.setValueAt("$Entero", fila, 1);
 				}
 			}
 		}
@@ -202,7 +283,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 		if (lexem.matches("^[0-9]{1,}[.][4][0-9]{1,}[4]$")) {
 			for (int fila = 0; fila < lexema.size(); fila++) {
 				if (tipoDeDato.equals(lexema.get(fila)) || lexem.equals(lexema.get(fila))) {
-					jTable2.setValueAt("$Real", fila, 1);
+					tablaLexemas.setValueAt("$Real", fila, 1);
 				}
 			}
 		}
@@ -210,7 +291,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 		if (lexem.matches("^[\"].{0,}[\"]$")) {
 			for (int fila = 0; fila < lexema.size(); fila++) {
 				if (tipoDeDato.equals(lexema.get(fila)) || lexem.equals(lexema.get(fila))) {
-					jTable2.setValueAt("$Cadena", fila, 1);
+					tablaLexemas.setValueAt("$Cadena", fila, 1);
 				}
 			}
 		}
@@ -219,20 +300,64 @@ public class Panel_Principal extends javax.swing.JFrame {
 	public void llenarColumnaTipoDato() {
 		for (int fila = 0; fila < enteros.size(); fila++) {
 			if(lexema.contains(enteros.get(fila))) {
-				jTable2.setValueAt("$Entero", lexema.indexOf(enteros.get(fila)), 1);
+				tablaLexemas.setValueAt("$Entero", lexema.indexOf(enteros.get(fila)), 1);
 			}
 		}
 		for (int fila = 0; fila < reales.size(); fila++) {
 			if(lexema.contains(reales.get(fila))) {
-				jTable2.setValueAt("$Real", lexema.indexOf(reales.get(fila)), 1);
+				tablaLexemas.setValueAt("$Real", lexema.indexOf(reales.get(fila)), 1);
 			}
 		}
 		for (int fila = 0; fila < cadenas.size(); fila++) {
 			if(lexema.contains(cadenas.get(fila))) {
-				jTable2.setValueAt("$Cadena", lexema.indexOf(cadenas.get(fila)), 1);
+				tablaLexemas.setValueAt("$Cadena", lexema.indexOf(cadenas.get(fila)), 1);
 			}
 		}
 		
+	}
+	public void analizarErrores(String codigo) {
+		char caracter;
+		String tipoDeDato = "";
+		String lexem = "";
+		String error ="Error";
+		String tipoDato;
+		int contadorErrores=0;
+		int contadorLinea=1;
+		int contadorFilaTablaErrores=0;
+		int fila=0;
+		for(int i =0;i<tablaErrores.getRowCount();i++) {
+			tablaErrores.setValueAt("", i, 0);//Coloca el lexema que da el error en la tabla de errores
+			tablaErrores.setValueAt("", i, 1);//Columna Token de error
+			tablaErrores.setValueAt("", i, 2);//Columna descripcion del error
+			tablaErrores.setValueAt("", i, 3);//Linea de codigo donde esta el error
+		}
+		for (int i = 0; i < codigo.length(); i++) {
+			caracter = codigo.charAt(i);
+			if (caracter != ' ' && caracter != '\n') {
+				lexem = lexem + caracter;
+			}
+			if(lexem.equals(";")) {
+				contadorLinea++;
+				lexem="";
+			}else if(lexema.contains(lexem)) {
+				fila=lexema.indexOf(lexem);//devuelve el indice del lexema evaluado
+				tipoDato=(String) tablaLexemas.getValueAt(fila, 1);//Obtiene el valor en la columna Tipo de Dato en la fila indicada
+				//Evalua si el lexema tiene un tipo de dato asignado, en caso de que no entonces se añadira a
+				//la tabla de errores
+				if(!lexem.equals("$Entero")&&!lexem.equals("$Real")&&!lexem.equals("$Cadena")&&!lexem.equals("=")&&!lexem.matches("^[(|)|{|}|,|;]$")&&!lexem.matches("^[+|-|*|/|%]$")) {
+					if((tipoDato==null||tipoDato=="")) {
+						contadorErrores++;
+						tablaErrores.setValueAt(lexem, contadorFilaTablaErrores, 0);//Coloca el lexema que da el error en la tabla de errores
+						tablaErrores.setValueAt(error+contadorErrores, contadorFilaTablaErrores, 1);//Columna Token de error
+						tablaErrores.setValueAt("Identificador no declarado", contadorFilaTablaErrores, 2);//Columna descripcion del error
+						tablaErrores.setValueAt(contadorLinea, contadorFilaTablaErrores, 3);
+						contadorFilaTablaErrores++;
+						lexem="";
+					}
+				}
+				lexem="";
+			}
+		}
 	}
 	public static void main(String args[]) {
 		try {
@@ -269,9 +394,9 @@ public class Panel_Principal extends javax.swing.JFrame {
 	private javax.swing.JButton Btn_Analizar;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JPanel jPanel1;
-	private javax.swing.JScrollPane jScrollPane1;
-	private javax.swing.JScrollPane jScrollPane3;
-	private javax.swing.JTable jTable2;
-	private javax.swing.JTextArea jTextArea1;
-	// End of variables declaration//GEN-END:variables
+	private javax.swing.JScrollPane scrollEntradaTexto;
+	private javax.swing.JScrollPane scrollTablaLexemas;
+	private javax.swing.JTable tablaLexemas;
+	private javax.swing.JTextArea entradaTexto;
+	private JTable tablaErrores;
 }
