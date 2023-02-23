@@ -2,8 +2,6 @@
 package compilador;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JLabel;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
@@ -335,8 +333,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 			caracter = codigo.charAt(i);
 			if (caracter != ' ' && caracter != '\n') {
 				lexem = lexem + caracter;
-			}
-			if(lexem.equals(";")) {
+			}else if(caracter=='\n') {
 				contadorLinea++;
 				lexem="";
 			}else if(lexema.contains(lexem)) {
@@ -347,12 +344,12 @@ public class Panel_Principal extends javax.swing.JFrame {
 				if(!lexem.equals("$Entero")&&!lexem.equals("$Real")&&!lexem.equals("$Cadena")&&!lexem.equals("=")&&!lexem.matches("^[(|)|{|}|,|;]$")&&!lexem.matches("^[+|-|*|/|%]$")) {
 					if((tipoDato==null||tipoDato=="")) {
 						contadorErrores++;
+						System.out.println("lexema "+lexem+", tipo de dato " + tipoDato +", linea "+contadorLinea);
 						tablaErrores.setValueAt(lexem, contadorFilaTablaErrores, 0);//Coloca el lexema que da el error en la tabla de errores
 						tablaErrores.setValueAt(error+contadorErrores, contadorFilaTablaErrores, 1);//Columna Token de error
-						tablaErrores.setValueAt("Identificador no declarado", contadorFilaTablaErrores, 2);//Columna descripcion del error
+						tablaErrores.setValueAt("Identificador puede no estar declarado", contadorFilaTablaErrores, 2);//Columna descripcion del error
 						tablaErrores.setValueAt(contadorLinea, contadorFilaTablaErrores, 3);
 						contadorFilaTablaErrores++;
-						lexem="";
 					}
 				}
 				lexem="";
