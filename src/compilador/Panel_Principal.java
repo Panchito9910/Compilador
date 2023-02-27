@@ -318,11 +318,14 @@ public class Panel_Principal extends javax.swing.JFrame {
 		String tipoDeDato = "";
 		String lexem = "";
 		String error ="Error";
+		String tipoError = "";
 		String tipoDato;
+		String tipoDatoAsignacion = "";
 		int contadorErrores=0;
 		int contadorLinea=1;
 		int contadorFilaTablaErrores=0;
 		int fila=0;
+		boolean asignacion=false;
 		for(int i =0;i<tablaErrores.getRowCount();i++) {
 			tablaErrores.setValueAt("", i, 0);//Coloca el lexema que da el error en la tabla de errores
 			tablaErrores.setValueAt("", i, 1);//Columna Token de error
@@ -341,20 +344,55 @@ public class Panel_Principal extends javax.swing.JFrame {
 				tipoDato=(String) tablaLexemas.getValueAt(fila, 1);//Obtiene el valor en la columna Tipo de Dato en la fila indicada
 				//Evalua si el lexema tiene un tipo de dato asignado, en caso de que no entonces se añadira a
 				//la tabla de errores
+				//Errores de identificadores
+				if(lexem.matches("^[#|@|a-z][a-z|A-Z|0-9]{1,}$")&&asignacion==false) {
+					tipoDatoAsignacion=tipoDato;
+				}
 				if(!lexem.equals("$Entero")&&!lexem.equals("$Real")&&!lexem.equals("$Cadena")&&!lexem.equals("=")&&!lexem.matches("^[(|)|{|}|,|;]$")&&!lexem.matches("^[+|-|*|/|%]$")) {
-					if((tipoDato==null||tipoDato=="")) {
+					//Error de asignacion de tipo de datos
+					if(asignacion) {
+						//Reglas de asignacion Entero a Entero
+						if(tipoDatoAsignacion.equals("$Entero")&&!tipoDato.equals("$Entero")) {//Verifica que los tipos de datos sean $Entero = $Entero
+							contadorErrores++;
+							tipoError="Incompatibilidad de asignacion $Entero a $Entero";
+							llenarTablaErrores(lexem, error,tipoError, contadorErrores, contadorFilaTablaErrores, contadorLinea);
+							contadorFilaTablaErrores++;
+						}
+						//Reglas de asignacion de Real a Real o Real a Entero
+						else if(tipoDatoAsignacion.equals("$Real") && !(tipoDato.equals("$Real")||tipoDato.equals("$Entero"))){
+							contadorErrores++;
+							tipoError="Incompatibilidad de asignacion $Real a $Real";
+							llenarTablaErrores(lexem, error,tipoError, contadorErrores, contadorFilaTablaErrores, contadorLinea);
+							contadorFilaTablaErrores++;
+						}
+						//Cadena a Cadena
+						else if(tipoDatoAsignacion.equals("$Cadena") && !(tipoDato.equals("$Cadena"))) {
+							contadorErrores++;
+							tipoError="Incompatibilidad de asignacion $Cadena a $Cadena";
+							llenarTablaErrores(lexem, error,tipoError, contadorErrores, contadorFilaTablaErrores, contadorLinea);
+							contadorFilaTablaErrores++;
+						}
+						asignacion=false;
+					}else if((tipoDato==null||tipoDato=="")) {
 						contadorErrores++;
-						System.out.println("lexema "+lexem+", tipo de dato " + tipoDato +", linea "+contadorLinea);
-						tablaErrores.setValueAt(lexem, contadorFilaTablaErrores, 0);//Coloca el lexema que da el error en la tabla de errores
-						tablaErrores.setValueAt(error+contadorErrores, contadorFilaTablaErrores, 1);//Columna Token de error
-						tablaErrores.setValueAt("Identificador puede no estar declarado", contadorFilaTablaErrores, 2);//Columna descripcion del error
-						tablaErrores.setValueAt(contadorLinea, contadorFilaTablaErrores, 3);
+						tipoError="Identificador puede no estar declarado";
+						llenarTablaErrores(lexem, error,tipoError, contadorErrores, contadorFilaTablaErrores, contadorLinea);
 						contadorFilaTablaErrores++;
 					}
+				}
+				//errores de asignacion
+				if(lexem.equals("=")) {
+					asignacion=true;
 				}
 				lexem="";
 			}
 		}
+	}
+	public void llenarTablaErrores(String lexem,String error,String tipoError ,int contadorErrores, int contadorFilaTablaErrores, int contadorLinea ) {
+		tablaErrores.setValueAt(lexem, contadorFilaTablaErrores, 0);//Coloca el lexema que da el error en la tabla de errores
+		tablaErrores.setValueAt(error+contadorErrores, contadorFilaTablaErrores, 1);//Columna Token de error
+		tablaErrores.setValueAt(tipoError, contadorFilaTablaErrores, 2);//Columna descripcion del error
+		tablaErrores.setValueAt(contadorLinea, contadorFilaTablaErrores, 3);//Columna linea del error
 	}
 	public static void main(String args[]) {
 		try {
@@ -378,7 +416,6 @@ public class Panel_Principal extends javax.swing.JFrame {
 					null, ex);
 		}
 		// </editor-fold>
-
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -386,7 +423,6 @@ public class Panel_Principal extends javax.swing.JFrame {
 			}
 		});
 	}
-
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JButton Btn_Analizar;
 	private javax.swing.JLabel jLabel1;
