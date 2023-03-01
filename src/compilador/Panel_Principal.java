@@ -211,9 +211,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 			if (caracter != ' ' && caracter != '\n') {
 				lexem = lexem + caracter;
 			} else {
-				if (lexema.isEmpty())
-					lexema.add(lexem);
-				if (lexema.contains(lexem) == false)
+				if (!lexema.contains(lexem))
 					lexema.add(lexem);
 				lexem = "";
 			}
@@ -235,9 +233,8 @@ public class Panel_Principal extends javax.swing.JFrame {
 			} else {
 				if (lexem.equals("$Entero") || lexem.equals("$Real") || lexem.equals("$Cadena"))
 					tipoDeDato = lexem;
-				/*System.out.println(" Tipo de dato : "+tipoDeDato+" lexema : "+lexem);*/
 				analizarExpresionRegular(tipoDeDato, lexem);
-				if (lexem.equals(";")) {
+				if (lexem.equals(";")||caracter=='\n') {
 					tipoDeDato="";
 				}
 				lexem = "";
@@ -245,32 +242,14 @@ public class Panel_Principal extends javax.swing.JFrame {
 		}
 	}
 	public void analizarExpresionRegular(String tipoDeDato, String lexem) {
-//		/*Identificadores*/
+		/*Identificadores*/
 		if (lexem.matches("^[#|@|a-z][a-z|A-Z|0-9]{1,}$")) {
-			if(tipoDeDato.equals("$Entero")) {
-				if (enteros.contains(lexem) == false) {
-					if(reales.contains(lexem)==false || cadenas.contains(lexem)==false) {
-						enteros.add(lexem);
-					}
-				}
-			}
-			if(tipoDeDato.equals("$Real")) {
-				if (reales.contains(lexem) == false) {
-					if(enteros.contains(lexem)==false || cadenas.contains(lexem)==false) {
-						reales.add(lexem);
-					}
-				}
-			}
-			if(tipoDeDato.equals("$Cadena")) {
-				if (cadenas.contains(lexem) == false) {
-					if(reales.contains(lexem)==false || enteros.contains(lexem)==false) {
-						cadenas.add(lexem);
-					}
-				}
-			}
+			if(tipoDeDato.equals("$Entero")) enteros.add(lexem);
+			if(tipoDeDato.equals("$Real")) reales.add(lexem);
+			if(tipoDeDato.equals("$Cadena")) cadenas.add(lexem);
 		}
 		/* Numeros enteros */
-		if (lexem.matches("^[4][0-9]{1,}[4]$")) {
+		if (lexem.matches("^[-][4][0-9]{1,}[4]|[4][0-9]{1,}[4]$")) {
 			for (int fila = 0; fila < lexema.size(); fila++) {
 				if (tipoDeDato.equals(lexema.get(fila)) || lexem.equals(lexema.get(fila))) {
 					tablaLexemas.setValueAt("$Entero", fila, 1);
@@ -278,7 +257,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 			}
 		}
 		/* Numeros reales */
-		if (lexem.matches("^[0-9]{1,}[.][4][0-9]{1,}[4]$")) {
+		if (lexem.matches("^[-][0-9]{1,}[.][4][0-9]{1,}[4]|[0-9]{1,}[.][4][0-9]{1,}[4]$")) {
 			for (int fila = 0; fila < lexema.size(); fila++) {
 				if (tipoDeDato.equals(lexema.get(fila)) || lexem.equals(lexema.get(fila))) {
 					tablaLexemas.setValueAt("$Real", fila, 1);
@@ -319,19 +298,24 @@ public class Panel_Principal extends javax.swing.JFrame {
 		String lexem = "";
 		String error ="Error";
 		String tipoError = "";
-		String tipoDato;
+		String tipoDato="";
 		String tipoDatoAsignacion = "";
+		String tipoDatoFuncion ="";
 		int contadorErrores=0;
 		int contadorLinea=1;
 		int contadorFilaTablaErrores=0;
 		int fila=0;
 		boolean asignacion=false;
+		boolean funcion=false;
+		boolean retorno=false;
+		boolean aritmetica=false;
 		for(int i =0;i<tablaErrores.getRowCount();i++) {
 			tablaErrores.setValueAt("", i, 0);//Coloca el lexema que da el error en la tabla de errores
 			tablaErrores.setValueAt("", i, 1);//Columna Token de error
 			tablaErrores.setValueAt("", i, 2);//Columna descripcion del error
 			tablaErrores.setValueAt("", i, 3);//Linea de codigo donde esta el error
 		}
+		
 		for (int i = 0; i < codigo.length(); i++) {
 			caracter = codigo.charAt(i);
 			if (caracter != ' ' && caracter != '\n') {
@@ -340,15 +324,18 @@ public class Panel_Principal extends javax.swing.JFrame {
 				contadorLinea++;
 				lexem="";
 			}else if(lexema.contains(lexem)) {
-				fila=lexema.indexOf(lexem);//devuelve el indice del lexema evaluado
+				fila=lexema.indexOf(lexem);//devuelve el indice del lexem evaluado
 				tipoDato=(String) tablaLexemas.getValueAt(fila, 1);//Obtiene el valor en la columna Tipo de Dato en la fila indicada
-				//Evalua si el lexema tiene un tipo de dato asignado, en caso de que no entonces se añadira a
-				//la tabla de errores
-				//Errores de identificadores
+				
 				if(lexem.matches("^[#|@|a-z][a-z|A-Z|0-9]{1,}$")&&asignacion==false) {
 					tipoDatoAsignacion=tipoDato;
 				}
-				if(!lexem.equals("$Entero")&&!lexem.equals("$Real")&&!lexem.equals("$Cadena")&&!lexem.equals("=")&&!lexem.matches("^[(|)|{|}|,|;]$")&&!lexem.matches("^[+|-|*|/|%]$")) {
+				if(lexem.matches("^[#|@|a-z][a-z|A-Z|0-9]{1,}$")&&funcion==false) {
+					tipoDatoFuncion=tipoDato;
+				}
+				//Evalua si el lexema tiene un tipo de dato asignado, en caso de que no entonces se añadira a
+				//la tabla de errores
+				if(!lexem.equals("$Entero")&&!lexem.equals("$Real")&&!lexem.equals("$Cadena")&&!lexem.equals("=")&&!lexem.matches("^[(|)|{|}|,|;]$")&&!lexem.matches("^[+|-]$")&&!lexem.equalsIgnoreCase("return")) {
 					//Error de asignacion de tipo de datos
 					if(asignacion) {
 						//Reglas de asignacion Entero a Entero
@@ -373,16 +360,41 @@ public class Panel_Principal extends javax.swing.JFrame {
 							contadorFilaTablaErrores++;
 						}
 						asignacion=false;
-					}else if((tipoDato==null||tipoDato=="")) {
+					}
+					//Error de funcion
+					else if(funcion) {
+						if(lexem.equals("return")) {
+							retorno=true;
+						}else {
+							if(!tipoDatoFuncion.equals(tipoDato)) {
+								contadorErrores++;
+								tipoError="Incompatibilidad de retorno de funcion";
+								llenarTablaErrores(lexem, error,tipoError, contadorErrores, contadorFilaTablaErrores, contadorLinea);
+								contadorFilaTablaErrores++;
+							}
+						}
+						retorno=false;
+						funcion=false;
+					}
+					//Error de identificadores no declarados
+					else if((tipoDato==null||tipoDato=="")) {
 						contadorErrores++;
 						tipoError="Identificador puede no estar declarado";
 						llenarTablaErrores(lexem, error,tipoError, contadorErrores, contadorFilaTablaErrores, contadorLinea);
 						contadorFilaTablaErrores++;
 					}
 				}
-				//errores de asignacion
+				//detectada asignacion
 				if(lexem.equals("=")) {
 					asignacion=true;
+				}
+				//detectada op aritmetica
+				if(lexem.matches("^[+|-]$")) {
+					asignacion=true;
+				}
+				//detectada funcion
+				if(lexem.equals("(")) {
+					funcion=true;
 				}
 				lexem="";
 			}
