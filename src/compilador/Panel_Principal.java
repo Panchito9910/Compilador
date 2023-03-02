@@ -72,6 +72,15 @@ public class Panel_Principal extends javax.swing.JFrame {
 				{null, null, null},
 				{null, null, null},
 				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
 			},
 			new String[] {
 				"LEXEMA", "TIPO DATO", "VALOR"
@@ -335,7 +344,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 				}
 				//Evalua si el lexema tiene un tipo de dato asignado, en caso de que no entonces se añadira a
 				//la tabla de errores
-				if(!lexem.equals("$Entero")&&!lexem.equals("$Real")&&!lexem.equals("$Cadena")&&!lexem.equals("=")&&!lexem.matches("^[(|)|{|}|,|;]$")&&!lexem.matches("^[+|-]$")&&!lexem.equalsIgnoreCase("return")) {
+				if(!lexem.equals("$Entero")&&!lexem.equals("$Real")&&!lexem.equals("$Cadena")&&!lexem.equals("=")&&!lexem.matches("^[(|)|{|}|,|;]$")&&!lexem.matches("^[+|-]$")&&!lexem.equals("return")) {
 					//Error de asignacion de tipo de datos
 					if(asignacion) {
 						//Reglas de asignacion Entero a Entero
@@ -363,18 +372,17 @@ public class Panel_Principal extends javax.swing.JFrame {
 					}
 					//Error de funcion
 					else if(funcion) {
-						if(lexem.equals("return")) {
-							retorno=true;
-						}else {
+						
+						 if(retorno) {
 							if(!tipoDatoFuncion.equals(tipoDato)) {
 								contadorErrores++;
 								tipoError="Incompatibilidad de retorno de funcion";
 								llenarTablaErrores(lexem, error,tipoError, contadorErrores, contadorFilaTablaErrores, contadorLinea);
 								contadorFilaTablaErrores++;
 							}
+							retorno=false;
+							funcion=false;
 						}
-						retorno=false;
-						funcion=false;
 					}
 					//Error de identificadores no declarados
 					else if((tipoDato==null||tipoDato=="")) {
@@ -395,6 +403,9 @@ public class Panel_Principal extends javax.swing.JFrame {
 				//detectada funcion
 				if(lexem.equals("(")) {
 					funcion=true;
+				}
+				if(lexem.equals("return")) {
+					retorno=true;
 				}
 				lexem="";
 			}
