@@ -16,7 +16,9 @@ public class Panel_Principal extends javax.swing.JFrame {
 	ArrayList<String> enteros = new ArrayList<String>();
 	ArrayList<String> reales = new ArrayList<String>();
 	ArrayList<String> cadenas = new ArrayList<String>();
-	
+	ArrayList<String> funciones = new ArrayList<String>();
+	ArrayList<String> argumentosFunciones = new ArrayList<String>();
+	ArrayList<Integer> cantidadArgumentosFunciones =new ArrayList<Integer>();
 	public Panel_Principal() {
 		initComponents();
 	}
@@ -303,21 +305,31 @@ public class Panel_Principal extends javax.swing.JFrame {
 	}
 	public void analizarErrores(String codigo) {
 		char caracter;
-		String tipoDeDato = "";
 		String lexem = "";
 		String error ="Error";
 		String tipoError = "";
 		String tipoDato="";
 		String tipoDatoAsignacion = "";
 		String tipoDatoFuncion ="";
+		String lexemaFuncion="";
+		String tipoDatoArgumento1="";
+		String tipoDatoArgumento2="";
+		
 		int contadorErrores=0;
 		int contadorLinea=1;
 		int contadorFilaTablaErrores=0;
 		int fila=0;
+		int cantArgumentosFuncion=0;
+		int contArgumentos=0;
+		
 		boolean asignacion=false;
 		boolean funcion=false;
+		boolean finArgumentos=false;
 		boolean retorno=false;
 		boolean aritmetica=false;
+		funciones.clear();
+		argumentosFunciones.clear();
+		cantidadArgumentosFunciones.clear();
 		for(int i =0;i<tablaErrores.getRowCount();i++) {
 			tablaErrores.setValueAt("", i, 0);//Coloca el lexema que da el error en la tabla de errores
 			tablaErrores.setValueAt("", i, 1);//Columna Token de error
@@ -341,6 +353,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 				}
 				if(lexem.matches("^[#|@|a-z][a-z|A-Z|0-9]{1,}$")&&funcion==false) {
 					tipoDatoFuncion=tipoDato;
+					lexemaFuncion=lexem;
 				}
 				//Evalua si el lexema tiene un tipo de dato asignado, en caso de que no entonces se añadira a
 				//la tabla de errores
@@ -372,7 +385,20 @@ public class Panel_Principal extends javax.swing.JFrame {
 					}
 					//Error de funcion
 					else if(funcion) {
-						
+						if(!finArgumentos) {
+							 if(!funciones.contains(lexemaFuncion)) {
+								 funciones.add(lexemaFuncion);
+							 }
+							 if(!finArgumentos) {
+								 argumentosFunciones.add(lexem); 
+							 }
+							 cantidadArgumentosFunciones.add(funciones.size()-1, cantArgumentosFuncion);
+							 cantArgumentosFuncion++;
+						 }else {
+							 cantArgumentosFuncion=0;
+							// lexemaFuncion="";
+						 }
+						 //Error por tipo de retorno
 						 if(retorno) {
 							if(!tipoDatoFuncion.equals(tipoDato)) {
 								contadorErrores++;
@@ -383,6 +409,30 @@ public class Panel_Principal extends javax.swing.JFrame {
 							retorno=false;
 							funcion=false;
 						}
+						if(funciones.contains(lexemaFuncion)) {
+							//Error por argumentos de funcion
+							if(contArgumentos<cantidadArgumentosFunciones.size()) {
+								tipoDatoArgumento1 = (String) tablaLexemas.getValueAt(lexema.indexOf(argumentosFunciones.get(contArgumentos)), 1);//Obtiene el tipo de dato de la posicion donde se encuentra el argumento en la tabla de lexemas
+								String arg1 = (String) tablaLexemas.getValueAt(lexema.indexOf(argumentosFunciones.get(contArgumentos)), 0);
+										
+								tipoDatoArgumento2 = (String) tablaLexemas.getValueAt(lexema.indexOf(lexem), 1);//Obtiene el tipo de dato de la posicion donde se encuentra el argumento en la tabla de lexemas
+								String arg2 = (String) tablaLexemas.getValueAt(lexema.indexOf(lexem), 0);
+								//System.out.println(arg1+" = "+tipoDatoArgumento1+", "+arg2+" = "+tipoDatoArgumento2);
+										
+								if(!tipoDatoArgumento1.equals(tipoDatoArgumento2) && argumentosFunciones.contains(arg1)) {//si los tipos de datos de los argumentos son diferentes entonces se produce un error
+									System.out.println("tipoDatoArgumento1 "+tipoDatoArgumento1+", "+"tipoDatoArgumento2 "+tipoDatoArgumento2);
+									contadorErrores++;
+									tipoError="Incompatibilidad de tipo de dato en el argumento";
+									llenarTablaErrores(lexem, error,tipoError, contadorErrores, contadorFilaTablaErrores, contadorLinea);
+								}
+								contArgumentos++;
+							}else {
+								contArgumentos=0;
+								
+							}
+							
+						}
+						
 					}
 					//Error de identificadores no declarados
 					else if((tipoDato==null||tipoDato=="")) {
@@ -403,6 +453,9 @@ public class Panel_Principal extends javax.swing.JFrame {
 				//detectada funcion
 				if(lexem.equals("(")) {
 					funcion=true;
+				}
+				if(lexem.equals(")")) {
+					finArgumentos=true;
 				}
 				if(lexem.equals("return")) {
 					retorno=true;
