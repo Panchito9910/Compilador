@@ -417,20 +417,24 @@ public class Panel_Principal extends javax.swing.JFrame {
 										
 								tipoDatoArgumento2 = (String) tablaLexemas.getValueAt(lexema.indexOf(lexem), 1);//Obtiene el tipo de dato de la posicion donde se encuentra el argumento en la tabla de lexemas
 								String arg2 = (String) tablaLexemas.getValueAt(lexema.indexOf(lexem), 0);
-								//System.out.println(arg1+" = "+tipoDatoArgumento1+", "+arg2+" = "+tipoDatoArgumento2);
-										
-								if(!tipoDatoArgumento1.equals(tipoDatoArgumento2) && argumentosFunciones.contains(arg1)) {//si los tipos de datos de los argumentos son diferentes entonces se produce un error
-									System.out.println("tipoDatoArgumento1 "+tipoDatoArgumento1+", "+"tipoDatoArgumento2 "+tipoDatoArgumento2);
+								System.out.println(arg1+" = "+tipoDatoArgumento1+", "+arg2+" = "+tipoDatoArgumento2);
+								if(tipoDatoArgumento2==null) {
+									contadorErrores++;
+									tipoError="Identificador no declarado";
+									llenarTablaErrores(lexem, error,tipoError, contadorErrores, contadorFilaTablaErrores, contadorLinea);
+								}
+								if(!tipoDatoArgumento1.equals(tipoDatoArgumento2) ) {//si los tipos de datos de los argumentos son diferentes entonces se produce un error
+									//System.out.println("tipoDatoArgumento1 "+tipoDatoArgumento1+", "+"tipoDatoArgumento2 "+tipoDatoArgumento2);
 									contadorErrores++;
 									tipoError="Incompatibilidad de tipo de dato en el argumento";
 									llenarTablaErrores(lexem, error,tipoError, contadorErrores, contadorFilaTablaErrores, contadorLinea);
 								}
 								contArgumentos++;
 							}else {
-								contArgumentos=0;
-								
+								contArgumentos=0;		
+								lexemaFuncion="";
+								funcion=false;
 							}
-							
 						}
 						
 					}
