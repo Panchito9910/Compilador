@@ -9,6 +9,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.Color;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Panel_Principal extends javax.swing.JFrame {
 	private static final long serialVersionUID = 1L;
@@ -19,6 +23,8 @@ public class Panel_Principal extends javax.swing.JFrame {
 	ArrayList<String> funciones = new ArrayList<String>();
 	ArrayList<String> argumentosFunciones = new ArrayList<String>();
 	ArrayList<Integer> cantidadArgumentosFunciones = new ArrayList<Integer>();
+	ArrayList<String> retornoFunciones = new ArrayList<String>();
+	Triplo triplo = new Triplo();
 
 	public Panel_Principal() {
 		initComponents();
@@ -27,6 +33,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 	private void initComponents() {
 
 		jPanel1 = new javax.swing.JPanel();
+		jPanel1.setBackground(new Color(240, 240, 240));
 		scrollEntradaTexto = new javax.swing.JScrollPane();
 		entradaTexto = new javax.swing.JTextArea();
 		jLabel1 = new javax.swing.JLabel();
@@ -75,70 +82,124 @@ public class Panel_Principal extends javax.swing.JFrame {
 			tablaLexemas.getColumnModel().getColumn(2).setResizable(false);
 		}
 
-		JLabel lblTablaLexemas = new JLabel("Tabla de Lexemas");
+		JLabel lblTablaLexemas = new JLabel("TABLA DE LEXEMAS");
 
 		JScrollPane scrollTablaErrores = new JScrollPane();
 
-		JLabel lblTablaErrores = new JLabel("Tabla de errores");
+		JLabel lblTablaErrores = new JLabel("TABLA DE ERRORES");
+		
+		JButton btnNewButton = new JButton("TRIPLO");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String codigo;
+				codigo = entradaTexto.getText();
+				triplo.generarTriplo(codigo);
+				triplo.setVisible(true);
+			}
+		});
 
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(Alignment.TRAILING).addGroup(jPanel1Layout
-				.createSequentialGroup().addGap(17)
-				.addComponent(scrollEntradaTexto, GroupLayout.PREFERRED_SIZE, 387, GroupLayout.PREFERRED_SIZE)
-				.addGroup(jPanel1Layout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(jPanel1Layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(lblTablaErrores).addGap(194))
-						.addGroup(Alignment.LEADING,
-								jPanel1Layout.createSequentialGroup().addGap(56)
-										.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
-												.addComponent(scrollTablaErrores, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(scrollTablaLexemas, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addContainerGap(20, Short.MAX_VALUE))))
-				.addGroup(jPanel1Layout.createSequentialGroup().addGap(149)
-						.addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, 385, Short.MAX_VALUE).addComponent(lblTablaLexemas)
-						.addGap(204))
-				.addGroup(jPanel1Layout.createSequentialGroup().addGap(396).addComponent(Btn_Analizar)
-						.addContainerGap(453, Short.MAX_VALUE)));
-		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(Alignment.TRAILING).addGroup(jPanel1Layout
-				.createSequentialGroup().addGap(29)
-				.addGroup(jPanel1Layout
-						.createParallelGroup(Alignment.BASELINE).addComponent(lblTablaLexemas).addComponent(jLabel1))
-				.addGap(18)
-				.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING).addGroup(jPanel1Layout
-						.createSequentialGroup()
-						.addComponent(scrollTablaLexemas, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
-						.addGap(30).addComponent(lblTablaErrores).addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollTablaErrores, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE))
-						.addComponent(scrollEntradaTexto, GroupLayout.PREFERRED_SIZE, 341, GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.RELATED).addComponent(Btn_Analizar)
-				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		jPanel1Layout.setHorizontalGroup(
+			jPanel1Layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(jPanel1Layout.createSequentialGroup()
+					.addGap(17)
+					.addComponent(scrollEntradaTexto, GroupLayout.PREFERRED_SIZE, 387, GroupLayout.PREFERRED_SIZE)
+					.addGroup(jPanel1Layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(jPanel1Layout.createSequentialGroup()
+							.addGap(18)
+							.addGroup(jPanel1Layout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(scrollTablaErrores, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
+								.addComponent(scrollTablaLexemas, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE))
+							.addContainerGap())
+						.addGroup(jPanel1Layout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblTablaErrores, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+							.addGap(298))))
+				.addGroup(jPanel1Layout.createSequentialGroup()
+					.addGap(149)
+					.addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 444, Short.MAX_VALUE)
+					.addComponent(lblTablaLexemas, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
+					.addGap(324))
+				.addGroup(jPanel1Layout.createSequentialGroup()
+					.addContainerGap(607, Short.MAX_VALUE)
+					.addComponent(Btn_Analizar)
+					.addGap(79)
+					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+					.addGap(311))
+		);
+		jPanel1Layout.setVerticalGroup(
+			jPanel1Layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(jPanel1Layout.createSequentialGroup()
+					.addGap(29)
+					.addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(jLabel1)
+						.addComponent(lblTablaLexemas))
+					.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+					.addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(scrollEntradaTexto, GroupLayout.PREFERRED_SIZE, 341, GroupLayout.PREFERRED_SIZE)
+						.addGroup(jPanel1Layout.createSequentialGroup()
+							.addComponent(scrollTablaLexemas, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
+							.addGap(19)
+							.addComponent(lblTablaErrores)
+							.addPreferredGap(ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+							.addComponent(scrollTablaErrores, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+					.addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(Btn_Analizar)
+						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+					.addGap(26))
+		);
 
 		tablaErrores = new JTable();
 		tablaErrores.setModel(new DefaultTableModel(
-				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null },
-						{ null, null, null, null }, { null, null, null, null }, { null, null, null, null },
-						{ null, null, null, null }, { null, null, null, null }, { null, null, null, null },
-						{ null, null, null, null }, },
-				new String[] { "Lexema", "Error", "Descripci\u00F3n", "L\u00EDnea" }) {
-			Class[] columnTypes = new Class[] { Object.class, Object.class, Object.class, String.class };
-
+			new Object[][] {
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+			},
+			new String[] {
+				"Lexema", "Error", "Descripci\u00F3n", "L\u00EDnea"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				Object.class, Object.class, Object.class, String.class
+			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 		});
+		tablaErrores.getColumnModel().getColumn(0).setPreferredWidth(51);
+		tablaErrores.getColumnModel().getColumn(1).setPreferredWidth(55);
+		tablaErrores.getColumnModel().getColumn(2).setPreferredWidth(178);
 		scrollTablaErrores.setViewportView(tablaErrores);
 		jPanel1.setLayout(jPanel1Layout);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		layout.setHorizontalGroup(
+			layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, 1154, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		layout.setVerticalGroup(
+			layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, 527, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
-						javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-				jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
@@ -152,6 +213,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 		analizarLexemas(codigo);
 		llenarColumnaTipoDato();
 		analizarErrores(codigo);
+		
 	}// GEN-LAST:event_Btn_AnalizarActionPerformed
 
 	public void llenarLista(String codigo) {
@@ -257,6 +319,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 
 	}
 
+
 	public void analizarErrores(String codigo) {
 		char caracter;
 		String lexem = "";
@@ -275,15 +338,19 @@ public class Panel_Principal extends javax.swing.JFrame {
 		int fila = 0;
 		int cantArgumentosFuncion = 0;
 		int contArgumentos = 0;
-
+		int contRetorno=0;
+		
 		boolean asignacion = false;
 		boolean funcion = false;
 		boolean finArgumentos = false;
 		boolean retorno = false;
 		boolean funcionRepetida = false;
+		
 		funciones.clear();
 		argumentosFunciones.clear();
 		cantidadArgumentosFunciones.clear();
+		retornoFunciones.clear();
+		
 		for (int i = 0; i < tablaErrores.getRowCount(); i++) {
 			tablaErrores.setValueAt("", i, 0);// Coloca el lexema que da el error en la tabla de errores
 			tablaErrores.setValueAt("", i, 1);// Columna Token de error
@@ -299,9 +366,8 @@ public class Panel_Principal extends javax.swing.JFrame {
 				contadorLinea++;
 				lexem = "";
 			} else if (lexema.contains(lexem)) {
-				fila = lexema.indexOf(lexem);// devuelve el indice del lexem evaluado
-				tipoDato = (String) tablaLexemas.getValueAt(fila, 1);// Obtiene el valor en la columna Tipo de Dato en
-																		// la fila indicada
+				fila = lexema.indexOf(lexem);// Devuelve el indice del lexem evaluado
+				tipoDato = (String) tablaLexemas.getValueAt(fila, 1);// Obtiene el valor en la columna Tipo de Dato en la fila indicada
 
 				if (lexem.matches("^[#|@|a-z][a-z|A-Z|0-9]{1,}$") && asignacion == false) {
 					tipoDatoAsignacion = tipoDato;
@@ -314,42 +380,71 @@ public class Panel_Principal extends javax.swing.JFrame {
 				// entonces se añadira a
 				// la tabla de errores
 				if (!lexem.equals("$Entero") && !lexem.equals("$Real") && !lexem.equals("$Cadena") && !lexem.equals("=")
-						&& !lexem.matches("^[(|)|{|}|,|;]$") && !lexem.matches("^[+|-]$") && !lexem.equals("return")) {
-					// Error de asignacion de tipo de datos
-					if (asignacion) {
+						&& !lexem.matches("^[(|)|{|}|,|;]$") && !lexem.matches("^[+|-|*|/|%]$") && !lexem.equals("return")) {
+					// Identificadores no declarados
+					String algo =(String) tablaLexemas.getValueAt(lexema.indexOf(lexem), 1);
+					if(algo==null) {
+						contadorErrores++;
+						tipoError = "Identificador no declarado";
+						llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
+						contadorFilaTablaErrores++;
+					}
+					// Error de retorno de funcion
+			        else if(asignacion && funciones.contains(lexem) && tipoDatoAsignacion!=null) {
+						String retornoFuncion = retornoFunciones.get(contRetorno);
+						int algo2 = lexema.indexOf(retornoFuncion);
+						tipoDato = (String) tablaLexemas.getValueAt(algo2, 1);
+						contRetorno++;
+						//System.out.println(contRetorno);
 						// Reglas de asignacion Entero a Entero
-						if (tipoDatoAsignacion.equals("$Entero") && !tipoDato.equals("$Entero")) {// Verifica que los
-																									// tipos de datos
-																									// sean $Entero =
-																									// $Entero
+						if (tipoDatoAsignacion.equals("$Entero") && !tipoDato.equals("$Entero")) {
 							contadorErrores++;
-							tipoError = "Incompatibilidad de asignacion $Entero a $Entero";
-							llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,
-									contadorLinea);
+							tipoError = "Incompatibilidad de asignación $Entero";
+							llenarTablaErrores(retornoFuncion, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
 							contadorFilaTablaErrores++;
 						}
 						// Reglas de asignacion de Real a Real o Real a Entero
-						else if (tipoDatoAsignacion.equals("$Real")
-								&& !(tipoDato.equals("$Real") || tipoDato.equals("$Entero"))) {
+						else if (tipoDatoAsignacion.equals("$Real") && !(tipoDato.equals("$Real") || tipoDato.equals("$Entero"))) {
 							contadorErrores++;
-							tipoError = "Incompatibilidad de asignacion $Real a $Real";
-							llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,
-									contadorLinea);
+							tipoError = "Incompatibilidad de asignación $Real";
+							llenarTablaErrores(retornoFuncion, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
 							contadorFilaTablaErrores++;
 						}
 						// Cadena a Cadena
 						else if (tipoDatoAsignacion.equals("$Cadena") && !(tipoDato.equals("$Cadena"))) {
 							contadorErrores++;
-							tipoError = "Incompatibilidad de asignacion $Cadena a $Cadena";
-							llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,
-									contadorLinea);
+							tipoError = "Incompatibilidad de asignación $Cadena";
+							llenarTablaErrores(retornoFuncion, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
+							contadorFilaTablaErrores++;
+						}
+						asignacion = false;
+					}else if (asignacion && tipoDatoAsignacion!=null) {
+						// Reglas de asignacion Entero a Entero
+						if (tipoDatoAsignacion.equals("$Entero") && !tipoDato.equals("$Entero")) {
+							contadorErrores++;
+							tipoError = "Incompatibilidad de asignación $Entero";
+							llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
+							contadorFilaTablaErrores++;
+						}
+						// Reglas de asignacion de Real a Real o Real a Entero
+						else if (tipoDatoAsignacion.equals("$Real") && !(tipoDato.equals("$Real") || tipoDato.equals("$Entero"))) {
+							contadorErrores++;
+							tipoError = "Incompatibilidad de asignación $Real";
+							llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
+							contadorFilaTablaErrores++;
+						}
+						// Cadena a Cadena
+						else if (tipoDatoAsignacion.equals("$Cadena") && !(tipoDato.equals("$Cadena"))) {
+							contadorErrores++;
+							tipoError = "Incompatibilidad de asignación $Cadena";
+							llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
 							contadorFilaTablaErrores++;
 						}
 						asignacion = false;
 					}
 					// Error de funcion
 					else if (funcion) {
-						if (!finArgumentos) {
+						if (!finArgumentos && funcionRepetida==false ) {
 							if (!funciones.contains(lexemaFuncion)) {
 								funciones.add(lexemaFuncion);
 							}
@@ -360,38 +455,50 @@ public class Panel_Principal extends javax.swing.JFrame {
 							cantArgumentosFuncion = 0;
 						}
 						if (retorno) {
+							//System.out.println(lexem);
+							retornoFunciones.add(lexem);
 							if (!tipoDatoFuncion.equals(tipoDato)) {
 								contadorErrores++;
 								tipoError = "Incompatibilidad de retorno de funcion";
-								llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,
-										contadorLinea);
+								llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
 								contadorFilaTablaErrores++;
 							}
 							retorno = false;
 						}
 						if (funcionRepetida) {
-							// System.out.println(lexemaFuncion);
 							// Error por argumentos de funcion
 							if (contArgumentos < cantidadArgumentosFunciones.size()) {
 								// argumentos de la funcion declarada
 								tipoDatoArgumento1 = (String) tablaLexemas.getValueAt(lexema.indexOf(argumentosFunciones.get(contArgumentos)), 1);
-								//String arg1 = (String) tablaLexemas.getValueAt(lexema.indexOf(argumentosFunciones.get(contArgumentos)), 0);
-
+								String arg1 = (String) tablaLexemas.getValueAt(lexema.indexOf(argumentosFunciones.get(contArgumentos)), 0);
 								// argumentos de la funcion invocada
 								tipoDatoArgumento2 = (String) tablaLexemas.getValueAt(lexema.indexOf(lexem), 1);
-								//String arg2 = (String) tablaLexemas.getValueAt(lexema.indexOf(lexem), 0);
-								//System.out.println(arg1 + " = " + tipoDatoArgumento1 + ", " + arg2 + " = "+ tipoDatoArgumento2 + ", lexema = " + lexem);
-
-								if (tipoDatoArgumento2 == null) {
+								String arg2 = (String) tablaLexemas.getValueAt(lexema.indexOf(lexem), 0);
+							if(arg2==null) {
+								contadorErrores++;
+								tipoError = "Identificador no declarado";
+								llenarTablaErrores(arg2, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
+								contadorFilaTablaErrores++;
+								// Reglas de asignacion Entero a Entero
+							}else if (arg1.equals("$Entero") && !arg2.equals("$Entero")) {
 									contadorErrores++;
-									tipoError = "Identificador no declarado";
-									llenarTablaErrores(lexem, error, tipoError, contadorErrores,
-											contadorFilaTablaErrores, contadorLinea);
-								} else if (!tipoDatoArgumento1.equals(tipoDatoArgumento2)) {
+									tipoError = "Incompatibilidad de asignación $Entero";
+									llenarTablaErrores(arg2, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
+									contadorFilaTablaErrores++;
+								}
+								// Reglas de asignacion de Real a Real o Real a Entero
+								else if (arg1.equals("$Real") && !(arg2.equals("$Real") || arg2.equals("$Entero"))) {
 									contadorErrores++;
-									tipoError = "Incompatibilidad de tipo de dato en el argumento";
-									llenarTablaErrores(lexem, error, tipoError, contadorErrores,
-											contadorFilaTablaErrores, contadorLinea);
+									tipoError = "Incompatibilidad de asignación $Real";
+									llenarTablaErrores(arg2, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
+									contadorFilaTablaErrores++;
+								}
+								// Cadena a Cadena
+								else if (arg1.equals("$Cadena") && !(arg2.equals("$Cadena"))) {
+									contadorErrores++;
+									tipoError = "Incompatibilidad de asignación $Cadena";
+									llenarTablaErrores(arg2, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
+									contadorFilaTablaErrores++;
 								}
 								contArgumentos++;
 							} else {
@@ -406,8 +513,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 					else if ((tipoDato == null || tipoDato == "")) {
 						contadorErrores++;
 						tipoError = "Identificador puede no estar declarado";
-						llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,
-								contadorLinea);
+						llenarTablaErrores(lexem, error, tipoError, contadorErrores, contadorFilaTablaErrores,contadorLinea);
 						contadorFilaTablaErrores++;
 					}
 				}
@@ -424,7 +530,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 					funcion = true;
 					finArgumentos = false;
 				}
-				if (funciones.contains(lexemaFuncion)) {
+				if (funciones.contains(lexem)) {
 					funcionRepetida = true;
 				}
 				if (lexem.equals(")")) {
@@ -437,7 +543,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 			}
 		}
 	}
-
+	
 	public void llenarTablaErrores(String lexem, String error, String tipoError, int contadorErrores,
 			int contadorFilaTablaErrores, int contadorLinea) {
 		tablaErrores.setValueAt(lexem, contadorFilaTablaErrores, 0);// Coloca el lexema que da el error en la tabla de
