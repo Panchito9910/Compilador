@@ -93,7 +93,8 @@ public class Panel_Principal extends javax.swing.JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String codigo;
 				codigo = entradaTexto.getText();
-				triplo.generarTriplo(codigo);
+				triplo.generarTriplo(codigo,retornoFunciones);
+				triplo.addJMP();
 				triplo.setVisible(true);
 			}
 		});
@@ -446,7 +447,7 @@ public class Panel_Principal extends javax.swing.JFrame {
 					else if (funcion) {
 						if (!finArgumentos && funcionRepetida==false ) {
 							if (!funciones.contains(lexemaFuncion)) {
-								funciones.add(lexemaFuncion);
+								 funciones.add(lexemaFuncion);
 							}
 							argumentosFunciones.add(lexem);
 							cantidadArgumentosFunciones.add(0, cantArgumentosFuncion);
@@ -455,7 +456,6 @@ public class Panel_Principal extends javax.swing.JFrame {
 							cantArgumentosFuncion = 0;
 						}
 						if (retorno) {
-							//System.out.println(lexem);
 							retornoFunciones.add(lexem);
 							if (!tipoDatoFuncion.equals(tipoDato)) {
 								contadorErrores++;
